@@ -28,11 +28,11 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
   var BotsiHighlightRules = function() {
 
     var builtinFunctions = (
-      "dialog|say|prompt|buttons|postback|invoke|open|image|audio|video"
+      "dialog|say|ask|emit|prompt|buttons|postback|invoke|open|image|audio|video|expecting"
     );
 
     var keywords = (
-      "if|else|do|end"
+      "if|else|do|end|import"
     );
 
     var buildinConstants = (
@@ -40,7 +40,7 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
     );
 
     var builtinVariables = (
-      "__unknown__|main|delay|typing_indicator|__unknown_location__|__unknown_attachment__"
+      "__unknown__|main|delay|typing_indicator|__unknown_location__|__unknown_attachment__|__unknown_postback__"
     );
 
     var keywordMapper = this.$keywords = this.createKeywordMapper({
