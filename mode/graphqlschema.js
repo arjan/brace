@@ -1,3 +1,48 @@
+ace.define("ace/mode/graphqlschema_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+"use strict";
+
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
+
+var GraphQLSchemaHighlightRules = function() {
+
+    var keywords = (
+      "type|interface|union|enum|schema|input|implements|extends|scalar"
+    );
+
+    var dataTypes = (
+      "Int|Float|String|ID|Boolean"
+    );
+
+    var keywordMapper = this.createKeywordMapper({
+        "keyword": keywords,
+        "storage.type": dataTypes
+    }, "identifier");
+
+    this.$rules = {
+      "start" : [ {
+        token : "comment",
+        regex : "#.*$"
+      }, {
+        token : "paren.lparen",
+        regex : /[\[({]/,
+        next  : "start"
+      }, {
+        token : "paren.rparen",
+        regex : /[\])}]/
+      }, {
+        token : keywordMapper,
+        regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
+      } ]
+    };
+    this.normalizeRules();
+};
+
+oop.inherits(GraphQLSchemaHighlightRules, TextHighlightRules);
+
+exports.GraphQLSchemaHighlightRules = GraphQLSchemaHighlightRules;
+});
+
 ace.define("ace/mode/folding/cstyle",["require","exports","module","ace/lib/oop","ace/range","ace/mode/folding/fold_mode"], function(acequire, exports, module) {
 "use strict";
 
@@ -19,8 +64,8 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 (function() {
     
-    this.foldingStartMarker = /(\{|\[)[^\}\]]*$|^\s*(\/\*)/;
-    this.foldingStopMarker = /^[^\[\{]*(\}|\])|^[\s\*]*(\*\/)/;
+    this.foldingStartMarker = /([\{\[\(])[^\}\]\)]*$|^\s*(\/\*)/;
+    this.foldingStopMarker = /^[^\[\{\(]*([\}\]\)])|^[\s\*]*(\*\/)/;
     this.singleLineBlockCommentRe= /^\s*(\/\*).*\*\/\s*$/;
     this.tripleStarBlockCommentRe = /^\s*(\/\*\*\*).*\*\/\s*$/;
     this.startRegionRe = /^\s*(\/\*|\/\/)#?region\b/;
@@ -138,22 +183,23 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 });
 
-ace.define("ace/mode/mavens_mate_log",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/mavens_mate_log_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
+ace.define("ace/mode/graphqlschema",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/graphqlschema_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
-var MavensMateLogHighlightRules = acequire("./mavens_mate_log_highlight_rules").MavensMateLogHighlightRules;
+var GraphQLSchemaHighlightRules = acequire("./graphqlschema_highlight_rules").GraphQLSchemaHighlightRules;
 var FoldMode = acequire("./folding/cstyle").FoldMode;
 
 var Mode = function() {
-    this.HighlightRules = MavensMateLogHighlightRules;
+    this.HighlightRules = GraphQLSchemaHighlightRules;
     this.foldingRules = new FoldMode();
 };
 oop.inherits(Mode, TextMode);
 
 (function() {
-    this.$id = "ace/mode/mavens_mate_log"
+    this.lineCommentStart = "#";
+    this.$id = "ace/mode/graphqlschema";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
