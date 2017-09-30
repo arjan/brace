@@ -15,6 +15,8 @@ var buildroot     =  path.join(__dirname, 'DefinitelyTyped');
   rm('-rf', buildroot)
   exec('git clone git://github.com/DefinitelyTyped/DefinitelyTyped.git ' + buildroot);
 
+  cp('-r', path.join(buildroot, 'types/ace'), buildroot)
+
   ls(buildroot).filter(function (name) { return name !== 'ace'; })
     .forEach(function (name) { rm('-rf', path.join(buildroot, name)) })
 
