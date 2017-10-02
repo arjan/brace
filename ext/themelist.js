@@ -1,8 +1,8 @@
 ace.define("ace/ext/themelist",["require","exports","module","ace/lib/fixoldbrowsers"], function(acequire, exports, module) {
-"use strict";
-acequire("ace/lib/fixoldbrowsers");
+  "use strict";
+  acequire("ace/lib/fixoldbrowsers");
 
-var themeData = [
+  var themeData = [
     ["Chrome"         ],
     ["Clouds"         ],
     ["Crimson Editor" ],
@@ -20,6 +20,7 @@ var themeData = [
     ["SQL Server"           ,"sqlserver"               , "light"],
     ["Ambiance"             ,"ambiance"                ,  "dark"],
     ["Chaos"                ,"chaos"                   ,  "dark"],
+    ["Clouds Content Mode"  ,"clouds_content_mode"     ,  "light"],
     ["Clouds Midnight"      ,"clouds_midnight"         ,  "dark"],
     ["Cobalt"               ,"cobalt"                  ,  "dark"],
     ["Gruvbox"              ,"gruvbox"                 ,  "dark"],
@@ -39,17 +40,17 @@ var themeData = [
     ["Tomorrow Night 80s"   ,"tomorrow_night_eighties" ,  "dark"],
     ["Twilight"             ,"twilight"                ,  "dark"],
     ["Vibrant Ink"          ,"vibrant_ink"             ,  "dark"]
-];
+  ];
 
 
-exports.themesByName = {};
-exports.themes = themeData.map(function(data) {
+  exports.themesByName = {};
+  exports.themes = themeData.map(function(data) {
     var name = data[1] || data[0].replace(/ /g, "_").toLowerCase();
     var theme = {
-        caption: data[0],
-        theme: "ace/theme/" + name,
-        isDark: data[2] == "dark",
-        name: name
+      caption: data[0],
+      theme: "ace/theme/" + name,
+      isDark: data[2] == "dark",
+      name: name
     };
     exports.themesByName[name] = theme;
     return theme;
