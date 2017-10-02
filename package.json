@@ -5,7 +5,7 @@
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
-    "update": "(cd build && node ./update && node ./update-ts)",
+    "update": "(cd build && node ./update)",
     "update-ts": "(cd build && node ./update-ts)",
     "test": "browserify test/*.js > test/bundle.js --debug && opener test/index.html"
   },
