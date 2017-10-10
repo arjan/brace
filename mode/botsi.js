@@ -26,7 +26,7 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
     var BotsiHighlightRules = function() {
 
         var builtinFunctions = (
-            "dialog|say|ask|emit|prompt|buttons|postback|invoke|open|image|audio|video|expecting|http_post|http_get|sleep|think|random|remember|forget"
+            "dialog|say|ask|emit|prompt|buttons|postback|invoke|open|image|audio|video|expecting|http_post|http_get|sleep|think|random|remember|forget|template"
         );
 
         var keywords = (
