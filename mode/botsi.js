@@ -26,7 +26,7 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
     var BotsiHighlightRules = function() {
 
         var builtinFunctions = (
-            "dialog|say|ask|emit|buttons|postback|invoke|image|audio|video|expecting|http_post|http_get|sleep|think|random|remember|forget|template|subtitle|image_url|default_action|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url"
+            "dialog|say|ask|emit|buttons|postback|invoke|image|audio|video|expecting|http_post|http_get|sleep|think|random|remember|forget|tag|untag|template|subtitle|image_url|default_action|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url"
         );
 
         var keywords = (
