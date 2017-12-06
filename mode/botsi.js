@@ -30,11 +30,11 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
         );
 
         var keywords = (
-            "if|else|do|end|import|repeat|in"
+            "if|else|branch|do|end|import|repeat|in"
         );
 
         var buildinConstants = (
-            "if|else|do|end|import|repeat|in"
+            "if|else|branch|do|end|import|repeat|in"
         );
 
         var builtinVariables = (
