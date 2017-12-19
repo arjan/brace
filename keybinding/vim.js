@@ -280,7 +280,7 @@ ace.define("ace/keyboard/vim",["require","exports","module","ace/range","ace/lib
           if (point.bias == 1) {
             cmp = 1;
           } else {
-            point.bias == -1;
+            point.bias = -1;
             continue;
           }
         }
@@ -1001,7 +1001,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
         CodeMirror.rmClass(cm.getWrapperElement(), "cm-fat-cursor");
 
       if (!next || next.attach != attachVimMap)
-        leaveVimMode(cm, false);
+        leaveVimMode(cm);
     }
     function attachVimMap(cm, prev) {
       if (this == CodeMirror.keyMap.vim)
@@ -1346,8 +1346,8 @@ dom.importCssString(".normal-mode .ace_cursor{\
         macroModeState: new MacroModeState,
         lastChararacterSearch: {increment:0, forward:true, selectedCharacter:''},
         registerController: new RegisterController({}),
-        searchHistoryController: new HistoryController({}),
-        exCommandHistoryController : new HistoryController({})
+        searchHistoryController: new HistoryController(),
+        exCommandHistoryController : new HistoryController()
       };
       for (var optionName in options) {
         var option = options[optionName];

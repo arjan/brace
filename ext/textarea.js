@@ -265,7 +265,7 @@ exports.transformTextarea = function(element, options) {
     session.setValue(element.value || element.innerHTML);
     editor.focus();
     container.appendChild(settingOpener);
-    setupApi(editor, editorDiv, settingDiv, ace, options, load);
+    setupApi(editor, editorDiv, settingDiv, ace, options);
     setupSettingPanel(settingDiv, settingOpener, editor);
 
     var state = "";
@@ -306,10 +306,9 @@ function load(url, module, callback) {
     });
 }
 
-function setupApi(editor, editorDiv, settingDiv, ace, options, loader) {
+function setupApi(editor, editorDiv, settingDiv, ace, options) {
     var session = editor.getSession();
     var renderer = editor.renderer;
-    loader = loader || load;
 
     function toBool(value) {
         return value === "true" || value == true;
@@ -353,7 +352,7 @@ function setupApi(editor, editorDiv, settingDiv, ace, options, loader) {
                 }
             break;
 
-            case "softWrap":
+            case "wrap":
             case "fontSize":
                 editor.$setOption(key, value);
             break;
