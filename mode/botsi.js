@@ -25,12 +25,14 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
 
     var BotsiHighlightRules = function() {
 
-        var buildinConstants = (
-            "query|reply|event|postback|image|location|audio|video|expecting|class|trigger|random|subtitle|image_url|default_action|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url|open"
+      var buildinConstants = (
+        "event|postback|web|image|location|audio|video|expecting|class|trigger|random|subtitle|image_url|default_action|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url|open"
+          + "|query|reply|chat_link|oauth_link|get_full_token|get_token_info|get_access_token"
         );
 
         var builtinFunctions = (
-            "if|else|branch|do|end|import|repeat|in|dialog|elixir|def|defp|say|ask|emit|log|invoke|stop|show|http_post|http_get|http_put|http_patch|http_delete|sleep|think|remember|forget|tag|untag|template|buttons"
+          "if|else|branch|do|end|import|repeat|in|dialog|elixir|def|defp|say|ask|emit|log|invoke|stop|show|http_post|http_get|http_put|http_patch|http_delete|sleep|think|remember|forget|tag|untag|template|buttons"
+          + "|mail|cancel_emit"
         );
 
         var keywords = (
