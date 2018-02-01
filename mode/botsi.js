@@ -31,7 +31,7 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
         );
 
         var builtinFunctions = (
-          "if|else|branch|do|end|import|repeat|in|dialog|elixir|def|defp|say|ask|emit|log|invoke|stop|show|http_post|http_get|http_put|http_patch|http_delete|sleep|think|remember|forget|tag|untag|template|buttons"
+          "if|else|branch|do|end|import|repeat|in|dialog|task|elixir|def|defp|say|ask|emit|log|invoke|perform|stop|show|http_post|http_get|http_put|http_patch|http_delete|sleep|think|remember|forget|tag|untag|template|buttons"
           + "|mail|cancel_emit"
         );
 
