@@ -27,7 +27,7 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
 
       var buildinConstants = (
         "event|postback|web|image|location|audio|video|expecting|quick_replies|class|trigger|random|subtitle|image_url|default_action|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url|open|intent|entity|match|learn|label"
-          + "|query|reply|chat_link|oauth_link|get_full_token|get_token_info|get_access_token"
+          + "|query|reply|chat_link|oauth_link|get_full_token|get_token_info|get_access_token|delete_token"
         );
 
         var builtinFunctions = (
@@ -36,7 +36,7 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
         );
 
         var keywords = (
-            "__unknown__|delay|timeout|typing_indicator|__unknown_location__|__unknown_attachment__|__unknown_event__"
+            "__unknown__|delay|timeout|typing_indicator|__unknown_location__|__unknown_attachment__|__unknown_event__|__timeout__|__returning__"
         );
 
         var builtinVariables = "";
