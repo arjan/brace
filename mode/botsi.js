@@ -26,7 +26,7 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
     var BotsiHighlightRules = function() {
 
       var buildinConstants = (
-        "event|postback|web|image|location|audio|video|expecting|quick_replies|class|trigger|random|subtitle|image_url|default_action|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url|open|intent|entity|match|learn|label"
+        "event|postback|web|image|location|audio|video|expecting|quick_replies|class|trigger|random|subtitle|image_url|default_action|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url|open|intent|entity|match|learn|label|as"
           + "|query|reply|chat_link|oauth_link|get_full_token|get_token_info|get_access_token|delete_token"
         );
 
