@@ -197,8 +197,7 @@ ace.define("ace/ext/split",["require","exports","module","ace/split"], function(
 "use strict";
 module.exports = acequire("../split");
 
-});
-                (function() {
+});                (function() {
                     ace.acequire(["ace/ext/split"], function() {});
                 })();
             

@@ -64,8 +64,7 @@ acequire("../config").defineOptions(Editor.prototype, "editor", {
     }
 });
 
-});
-                (function() {
+});                (function() {
                     ace.acequire(["ace/ext/spellcheck"], function() {});
                 })();
             

@@ -20522,8 +20522,7 @@ exports.createEditSession = function(text, mode) {
 exports.EditSession = EditSession;
 exports.UndoManager = UndoManager;
 exports.version = "1.2.9";
-});
-            (function() {
+});            (function() {
                 ace.acequire(["ace/ace"], function(a) {
                     if (a) {
                         a.config.init(true);

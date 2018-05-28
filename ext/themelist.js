@@ -56,8 +56,7 @@ ace.define("ace/ext/themelist",["require","exports","module","ace/lib/fixoldbrow
     return theme;
 });
 
-});
-                (function() {
+});                (function() {
                     ace.acequire(["ace/ext/themelist"], function() {});
                 })();
             

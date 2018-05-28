@@ -46,8 +46,7 @@ var StatusBar = function(editor, parentNode) {
 
 exports.StatusBar = StatusBar;
 
-});
-                (function() {
+});                (function() {
                     ace.acequire(["ace/ext/statusbar"], function() {});
                 })();
             

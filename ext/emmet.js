@@ -1216,8 +1216,7 @@ exports.setCore = function(e) {
     else
        emmet = e;
 };
-});
-                (function() {
+});                (function() {
                     ace.acequire(["ace/ext/emmet"], function() {});
                 })();
             

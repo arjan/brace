@@ -665,8 +665,7 @@ module.exports.init = function(editor) {
         showSettingsMenu(this);
     };
 };
-});
-                (function() {
+});                (function() {
                     ace.acequire(["ace/ext/settings_menu"], function() {});
                 })();
             

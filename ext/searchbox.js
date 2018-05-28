@@ -501,8 +501,7 @@ exports.Search = function(editor, isReplace) {
     sb.show(editor.session.getTextRange(), isReplace);
 };
 
-});
-                (function() {
+});                (function() {
                     ace.acequire(["ace/ext/searchbox"], function() {});
                 })();
             
