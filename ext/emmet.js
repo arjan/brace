@@ -272,7 +272,7 @@ var SnippetManager = function() {
                 return;
 
             var value = tokens.slice(i + 1, i1);
-            var isNested = value.some(function(t) {return typeof t === "object";});          
+            var isNested = value.some(function(t) {return typeof t === "object";});
             if (isNested && !ts.value) {
                 ts.value = value;
             } else if (value.length && (!ts.value || typeof ts.value !== "string")) {
@@ -1128,7 +1128,7 @@ exports.runEmmetCommand = function runEmmetCommand(editor) {
         var result = actions.run(this.action, editorProxy);
     } catch(e) {
         if (!emmet) {
-            load(runEmmetCommand.bind(this, editor));
+            exports.load(runEmmetCommand.bind(this, editor));
             return true;
         }
         editor._signal("changeStatus", typeof e == "string" ? e : e.message);
@@ -1186,11 +1186,11 @@ var onChangeMode = function(e, target) {
     if (e.enableEmmet === false)
         enabled = false;
     if (enabled)
-        load();
+        exports.load();
     exports.updateCommands(editor, enabled);
 };
 
-var load = function(cb) {
+exports.load = function(cb) {
     if (typeof emmetPath == "string") {
         acequire("ace/config").loadModule(emmetPath, function() {
             emmetPath = null;
@@ -1217,6 +1217,10 @@ exports.setCore = function(e) {
        emmet = e;
 };
 });                (function() {
-                    ace.acequire(["ace/ext/emmet"], function() {});
+                    ace.acequire(["ace/ext/emmet"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             

@@ -1,6 +1,5 @@
-ace.define("ace/ext/themelist",["require","exports","module","ace/lib/fixoldbrowsers"], function(acequire, exports, module) {
-  "use strict";
-  acequire("ace/lib/fixoldbrowsers");
+ace.define("ace/ext/themelist",["require","exports","module"], function(acequire, exports, module) {
+"use strict";
 
   var themeData = [
     ["Chrome"         ],
@@ -22,6 +21,7 @@ ace.define("ace/ext/themelist",["require","exports","module","ace/lib/fixoldbrow
     ["Chaos"                ,"chaos"                   ,  "dark"],
     ["Clouds Content Mode"  ,"clouds_content_mode"     ,  "light"],
     ["Clouds Midnight"      ,"clouds_midnight"         ,  "dark"],
+    ["Dracula"              ,""                        ,  "dark"],
     ["Cobalt"               ,"cobalt"                  ,  "dark"],
     ["Gruvbox"              ,"gruvbox"                 ,  "dark"],
     ["Green on Black"       ,"gob"                     ,  "dark"],
@@ -57,6 +57,10 @@ ace.define("ace/ext/themelist",["require","exports","module","ace/lib/fixoldbrow
 });
 
 });                (function() {
-                    ace.acequire(["ace/ext/themelist"], function() {});
+                    ace.acequire(["ace/ext/themelist"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             

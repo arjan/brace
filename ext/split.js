@@ -198,6 +198,10 @@ ace.define("ace/ext/split",["require","exports","module","ace/split"], function(
 module.exports = acequire("../split");
 
 });                (function() {
-                    ace.acequire(["ace/ext/split"], function() {});
+                    ace.acequire(["ace/ext/split"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             

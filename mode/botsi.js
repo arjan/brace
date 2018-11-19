@@ -36,7 +36,7 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
         );
 
         var keywords = (
-            "__unknown__|delay|timeout|typing_indicator|__unknown_location__|__unknown_attachment__|__unknown_event__|__timeout__|__returning__"
+            "__unknown__|__root__|delay|timeout|typing_indicator|__unknown_location__|__unknown_attachment__|__unknown_event__|__timeout__|__returning__"
         );
 
         var builtinVariables = "";
@@ -307,7 +307,7 @@ oop.inherits(Mode, TextMode);
             var match = line.match(/^.*[\{\(\[]\s*$/);
             var startingClassOrMethod = line.match(/^\s*(class|def|module)\s.*$/);
             var startingDoBlock = line.match(/.*do(\s*|\s+\|.*\|\s*)$/);
-            var startingConditional = line.match(/^\s*(if|else|when)\s*/)
+            var startingConditional = line.match(/^\s*(if|else|when)\s*/);
             if (match || startingClassOrMethod || startingDoBlock || startingConditional) {
                 indent += tab;
             }
@@ -338,4 +338,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/botsi"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

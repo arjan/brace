@@ -123,6 +123,7 @@ border: 1px solid rgb(200, 200, 250);\
 background: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==\") right repeat-y;\
 }\
 ";
+exports.$id = "ace/theme/textmate";
 
 var dom = acequire("../lib/dom");
 dom.importCssString(exports.cssText, exports.cssClass);
@@ -203,6 +204,7 @@ function setupContainer(element, getValue) {
 }
 
 exports.transformTextarea = function(element, options) {
+    var isFocused = element.autofocus || document.activeElement == element;
     var session;
     var container = setupContainer(element, function() {
         return session.getValue();
@@ -225,12 +227,9 @@ exports.transformTextarea = function(element, options) {
         position: "absolute",
         right: "0px",
         bottom: "0px",
-        background: "red",
         cursor: "nw-resize",
-        borderStyle: "solid",
-        borderWidth: "9px 8px 10px 9px",
-        width: "2px",
-        borderColor: "lightblue gray gray lightblue",
+        border: "solid 9px",
+        borderColor: "lightblue gray gray #ceade6",
         zIndex: 101
     });
 
@@ -263,7 +262,8 @@ exports.transformTextarea = function(element, options) {
     session = editor.getSession();
 
     session.setValue(element.value || element.innerHTML);
-    editor.focus();
+    if (isFocused)
+        editor.focus();
     container.appendChild(settingOpener);
     setupApi(editor, editorDiv, settingDiv, ace, options);
     setupSettingPanel(settingDiv, settingOpener, editor);
@@ -282,6 +282,7 @@ exports.transformTextarea = function(element, options) {
     });
 
     event.addListener(settingOpener, "mousedown", function(e) {
+        e.preventDefault();
         if (state == "toggle") {
             editor.setDisplaySettings();
             return;
@@ -553,6 +554,10 @@ exports.defaultOptions = {
 };
 
 });                (function() {
-                    ace.acequire(["ace/ext/textarea"], function() {});
+                    ace.acequire(["ace/ext/textarea"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             

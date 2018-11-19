@@ -2093,7 +2093,7 @@ var TokenIterator = acequire("../../token_iterator").TokenIterator;
 var lang = acequire("../../lib/lang");
 
 function is(token, type) {
-    return token.type.lastIndexOf(type + ".xml") > -1;
+    return token && token.type.lastIndexOf(type + ".xml") > -1;
 }
 
 var XmlBehaviour = function () {
@@ -2167,7 +2167,8 @@ var XmlBehaviour = function () {
                 if (position.column < tokenEndColumn)
                     return;
                 if (position.column == tokenEndColumn) {
-                    if (is(iterator.stepForward(), "attribute-value"))
+                    var nextToken = iterator.stepForward();
+                    if (nextToken && is(nextToken, "attribute-value"))
                         return;
                     iterator.stepBackward();
                 }
@@ -2632,4 +2633,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/xquery"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

@@ -764,17 +764,19 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 });
 
-ace.define("ace/mode/kotlin",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/kotlin_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
+ace.define("ace/mode/kotlin",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/kotlin_highlight_rules","ace/mode/behaviour/cstyle","ace/mode/folding/cstyle"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
 var KotlinHighlightRules = acequire("./kotlin_highlight_rules").KotlinHighlightRules;
+var CstyleBehaviour = acequire("./behaviour/cstyle").CstyleBehaviour;
 var FoldMode = acequire("./folding/cstyle").FoldMode;
 
 var Mode = function() {
     this.HighlightRules = KotlinHighlightRules;
     this.foldingRules = new FoldMode();
+    this.$behaviour = new CstyleBehaviour();
 };
 oop.inherits(Mode, TextMode);
 
@@ -783,4 +785,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/kotlin"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            
