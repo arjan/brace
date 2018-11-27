@@ -26,7 +26,7 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
     var BotsiHighlightRules = function() {
 
       var buildinConstants = (
-        "dialogflow|event|moment|web|image|location|audio|video|event|expecting|quick_replies|class|preview_image|trigger|random|subtitle|image_url|default_action|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url|open|intent|entity|match|learn|label|as|to|name"
+        "dialogflow|event|moment|web|image|location|audio|video|event|expecting|quick_replies|class|preview_image|trigger|random|subtitle|image_url|default_action|hide_modal|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url|open|intent|entity|match|label|as|to|name"
           + "|query|reply|chat_link|oauth_link|get_full_token|get_token_info|get_access_token|delete_token|spawn_group"
         );
 
@@ -36,7 +36,7 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
         );
 
         var keywords = (
-            "__unknown__|__root__|__error__|delay|timeout|typing_indicator|__unknown_location__|__unknown_attachment__|__unknown_event__|__timeout__|__returning__"
+            "__unknown__|__root__|__error__|delay|timeout|typing_indicator|__unknown_location__|__unknown_attachment__|__unknown_event__|__timeout__|__ask_timeout__|__returning__"
         );
 
         var builtinVariables = "";
@@ -104,7 +104,7 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
 
                 {
                     token: "constant.language.boolean",
-                    regex: "(?:true|false)\\b"
+                    regex: "(?:true|false|nil)\\b"
                 }, {
                     token: keywordMapper,
                     regex: "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
