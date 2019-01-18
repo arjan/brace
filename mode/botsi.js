@@ -80,6 +80,32 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
                     },
                     nextState: "start"
                 }, {
+                    token: "i18nstring.start",
+                    regex: /_\("/,
+                    push: [{
+                        token : "constant.language.escape",
+                        regex : /\\(?:[nsrtvfbae'"\\]|c.|C-.|M-.(?:\\C-.)?|[0-7]{3}|x[\da-fA-F]{2}|u[\da-fA-F]{4})/
+                    }, {
+                        token: "i18nstring.end",
+                        regex: /"\)/,
+                        next: "pop"
+                    }, {
+                        defaultToken: "i18nstring"
+                    }]
+                }, {
+                    token: "i18nstring.start",
+                    regex: /_"/,
+                    push: [{
+                        token : "constant.language.escape",
+                        regex : /\\(?:[nsrtvfbae'"\\]|c.|C-.|M-.(?:\\C-.)?|[0-7]{3}|x[\da-fA-F]{2}|u[\da-fA-F]{4})/
+                    }, {
+                        token: "i18nstring.end",
+                        regex: /"/,
+                        next: "pop"
+                    }, {
+                        defaultToken: "i18nstring"
+                    }]
+                }, {
                     token: "string.start",
                     regex: /"/,
                     push: [{

@@ -81,6 +81,10 @@ color: #b0b0b0;\
 color: #5D90CD;\
 background-color: #fff;\
 }\
+.ace-clouds-content-mode .ace_i18nstring {\
+color: #5D90CD;\
+background-color: #fff;\
+}\
 .ace-clouds-content-mode .ace_comment {\
 color: #b0b0b0;\
 }\
