@@ -192,6 +192,7 @@ var supportedModes = {
     Forth:       ["frt|fs|ldr|fth|4th"],
     Fortran:     ["f|f90"],
     FSharp:      ["fsi|fs|ml|mli|fsx|fsscript"],
+    FSL:         ["fsl"],
     FTL:         ["ftl"],
     Gcode:       ["gcode"],
     Gherkin:     ["feature"],
@@ -204,7 +205,7 @@ var supportedModes = {
     HAML:        ["haml"],
     Handlebars:  ["hbs|handlebars|tpl|mustache"],
     Haskell:     ["hs"],
-    Haskell_Cabal:     ["cabal"],
+    Haskell_Cabal: ["cabal"],
     haXe:        ["hx"],
     Hjson:       ["hjson"],
     HTML:        ["html|htm|xhtml|vue|we|wpy"],
@@ -248,10 +249,10 @@ var supportedModes = {
     OCaml:       ["ml|mli"],
     Pascal:      ["pas|p"],
     Perl:        ["pl|pm"],
-	Perl6:       ["p6|pl6|pm6"],
+    Perl6:       ["p6|pl6|pm6"],
     pgSQL:       ["pgsql"],
     PHP_Laravel_blade: ["blade.php"],
-    PHP:         ["inc|php|phtml|shtml|php3|php4|php5|phps|phpt|aw|ctp|module"],
+    PHP:         ["php|inc|phtml|shtml|php3|php4|php5|phps|phpt|aw|ctp|module"],
     Puppet:      ["epp|pp"],
     Pig:         ["pig"],
     Powershell:  ["ps1"],
@@ -320,7 +321,7 @@ var nameOverrides = {
     HTML_Elixir: "HTML (Elixir)",
     FTL: "FreeMarker",
     PHP_Laravel_blade: "PHP (Blade Template)",
-	Perl6: "Perl 6"
+    Perl6: "Perl 6"
 };
 var modesByName = {};
 for (var name in supportedModes) {

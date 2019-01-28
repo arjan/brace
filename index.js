@@ -5108,7 +5108,7 @@ var BidiHandler = function(session) {
         });
 
         if (this.isRtlDir) {
-            this.fontMetrics.$main.innerHTML = (this.line.charAt(this.line.length - 1) == bidiUtil.DOT) ? this.line.substr(0, this.line.length - 1) : this.line;
+            this.fontMetrics.$main.textContent = (this.line.charAt(this.line.length - 1) == bidiUtil.DOT) ? this.line.substr(0, this.line.length - 1) : this.line;
             this.rtlLineOffset = this.contentWidth - this.fontMetrics.$main.getBoundingClientRect().width;
         }
     };
@@ -7201,7 +7201,7 @@ var Mode = function() {
     };
 
     this.$delegator = function(method, args, defaultHandler) {
-        var state = args[0];
+        var state = args[0] || "start";
         if (typeof state != "string") {
             if (Array.isArray(state[2])) {
                 var language = state[2][state[2].length - 1];
@@ -7209,7 +7209,7 @@ var Mode = function() {
                 if (mode)
                     return mode[method].apply(mode, [state[1]].concat([].slice.call(args, 1)));
             }
-            state = state[0];
+            state = state[0] || "start";
         }
             
         for (var i = 0; i < this.$embeds.length; i++) {
@@ -8453,17 +8453,16 @@ var RangeList = function() {
                 if (r.start.row > endRow)
                     break;
                     
-                if (r.end.row < endRow) {
+                if (r.end.row < endRow
+                    && (
+                        startRow < r.end.row 
+                        || startRow == r.end.row && start.column < r.end.column
+                    )
+                ) {
                     r.end.row = startRow;
                     r.end.column = start.column;
                 }
-                   
-                if (r.start.row < endRow || r.start.row == endRow && r.start.column <= end.colum) {
-                    r.start.row = startRow;
-                    r.start.column = start.column;
-                }
-    
-                if (r.end.row == endRow) {
+                else if (r.end.row == endRow) {
                     if (r.end.column <= end.column) {
                         if (lineDif || r.end.column > start.column) {
                             r.end.column = start.column;
@@ -8475,7 +8474,20 @@ var RangeList = function() {
                         r.end.row += lineDif;
                     }
                 }
-                if (r.start.row == endRow) {
+                else if (r.end.row > endRow) {
+                    r.end.row += lineDif;
+                }
+                
+                if (r.start.row < endRow
+                    && (
+                        startRow < r.start.row 
+                        || startRow == r.start.row && start.column < r.start.column
+                    )
+                ) {
+                    r.start.row = startRow;
+                    r.start.column = start.column;
+                }
+                else if (r.start.row == endRow) {
                     if (r.start.column <= end.column) {
                         if (lineDif || r.start.column > start.column) {
                             r.start.column = start.column;
@@ -8486,6 +8498,9 @@ var RangeList = function() {
                         r.start.column += colDiff;
                         r.start.row += lineDif;
                     }
+                }
+                else if (r.start.row > endRow) {
+                    r.start.row += lineDif;
                 }
             }
         }
@@ -21266,7 +21281,7 @@ exports.Editor = Editor;
 exports.EditSession = EditSession;
 exports.UndoManager = UndoManager;
 exports.VirtualRenderer = Renderer;
-exports.version = "1.4.1";
+exports.version = "1.4.2";
 });            (function() {
                 ace.acequire(["ace/ace"], function(a) {
                     if (a) {
