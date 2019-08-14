@@ -36,7 +36,7 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
         );
 
         var keywords = (
-            "__unknown__|__root__|__error__|delay|timeout|typing_indicator|__unknown_location__|__unknown_attachment__|__unknown_event__|__timeout__|__ask_timeout__|__returning__"
+            "__unknown__|__root__|__error__|__main__|__master__|__group__|__resume__|delay|timeout|typing_indicator|__unknown_location__|__unknown_attachment__|__unknown_event__|__timeout__|__ask_timeout__|__returning__"
         );
 
         var builtinVariables = "";
