@@ -62,54 +62,59 @@ margin: 0px;\
 background: #f0f0f0;\
 }";
 dom.importCssString(cssText);
-module.exports.overlayPage = function overlayPage(editor, contentElement, top, right, bottom, left) {
-    top = top ? 'top: ' + top + ';' : '';
-    bottom = bottom ? 'bottom: ' + bottom + ';' : '';
-    right = right ? 'right: ' + right + ';' : '';
-    left = left ? 'left: ' + left + ';' : '';
 
+module.exports.overlayPage = function overlayPage(editor, contentElement, callback) {
     var closer = document.createElement('div');
-    var contentContainer = document.createElement('div');
+    var ignoreFocusOut = false;
 
     function documentEscListener(e) {
         if (e.keyCode === 27) {
-            closer.click();
+            close();
+        }
+    }
+
+    function close() {
+        if (!closer) return;
+        document.removeEventListener('keydown', documentEscListener);
+        closer.parentNode.removeChild(closer);
+        if (editor) {
+            editor.focus();
+        }
+        closer = null;
+        callback && callback();
+    }
+    function setIgnoreFocusOut(ignore) {
+        ignoreFocusOut = ignore;
+        if (ignore) {
+            closer.style.pointerEvents = "none";
+            contentElement.style.pointerEvents = "auto";
         }
     }
 
     closer.style.cssText = 'margin: 0; padding: 0; ' +
         'position: fixed; top:0; bottom:0; left:0; right:0;' +
         'z-index: 9990; ' +
-        'background-color: rgba(0, 0, 0, 0.3);';
-    closer.addEventListener('click', function() {
-        document.removeEventListener('keydown', documentEscListener);
-        closer.parentNode.removeChild(closer);
-        editor.focus();
-        closer = null;
+        (editor ? 'background-color: rgba(0, 0, 0, 0.3);' : '');
+    closer.addEventListener('click', function(e) {
+        if (!ignoreFocusOut) {
+            close();
+        }
     });
     document.addEventListener('keydown', documentEscListener);
 
-    contentContainer.style.cssText = top + right + bottom + left;
-    contentContainer.addEventListener('click', function(e) {
+    contentElement.addEventListener('click', function (e) {
         e.stopPropagation();
     });
 
-    var wrapper = dom.createElement("div");
-    wrapper.style.position = "relative";
-    
-    var closeButton = dom.createElement("div");
-    closeButton.className = "ace_closeButton";
-    closeButton.addEventListener('click', function() {
-        closer.click();
-    });
-    
-    wrapper.appendChild(closeButton);
-    contentContainer.appendChild(wrapper);
-    
-    contentContainer.appendChild(contentElement);
-    closer.appendChild(contentContainer);
+    closer.appendChild(contentElement);
     document.body.appendChild(closer);
-    editor.blur();
+    if (editor) {
+        editor.blur();
+    }
+    return {
+        close: close,
+        setIgnoreFocusOut: setIgnoreFocusOut
+    };
 };
 
 });
@@ -161,11 +166,12 @@ var supportedModes = {
     Assembly_x86:["asm|a"],
     AutoHotKey:  ["ahk"],
     Apex:        ["apex|cls|trigger|tgr"],
+    AQL:         ["aql"],
     BatchFile:   ["bat|cmd"],
-    Bro:         ["bro"],
     Botsi:       ["bot"],
     C_Cpp:       ["cpp|c|cc|cxx|h|hh|hpp|ino"],
     C9Search:    ["c9search_results"],
+    Crystal:     ["cr"],
     Cirru:       ["cirru|cr"],
     Clojure:     ["clj|cljs"],
     Cobol:       ["CBL|COB"],
@@ -217,6 +223,7 @@ var supportedModes = {
     Jade:        ["jade|pug"],
     Java:        ["java"],
     JavaScript:  ["js|jsm|jsx"],
+    JSON5:       ["json5"],
     JSON:        ["json"],
     JSONiq:      ["jq"],
     JSP:         ["jsp"],
@@ -243,8 +250,11 @@ var supportedModes = {
     MIXAL:       ["mixal"],
     MUSHCode:    ["mc|mush"],
     MySQL:       ["mysql"],
+    Nginx:       ["nginx|conf"],
     Nix:         ["nix"],
+    Nim:         ["nim"],
     NSIS:        ["nsi|nsh"],
+    Nunjucks:    ["nunjucks|nunjs|nj|njk"],
     ObjectiveC:  ["m|mm"],
     OCaml:       ["ml|mli"],
     Pascal:      ["pas|p"],
@@ -271,7 +281,7 @@ var supportedModes = {
     Rust:        ["rs"],
     SASS:        ["sass"],
     SCAD:        ["scad"],
-    Scala:       ["scala"],
+    Scala:       ["scala|sbt"],
     Scheme:      ["scm|sm|rkt|oak|scheme"],
     SCSS:        ["scss"],
     SH:          ["sh|bash|^.bashrc"],
@@ -305,6 +315,7 @@ var supportedModes = {
     XML:         ["xml|rdf|rss|wsdl|xslt|atom|mathml|mml|xul|xbl|xaml"],
     XQuery:      ["xq"],
     YAML:        ["yaml|yml"],
+    Zeek:        ["zeek|bro"],
     Django:      ["html"]
 };
 
@@ -321,7 +332,8 @@ var nameOverrides = {
     HTML_Elixir: "HTML (Elixir)",
     FTL: "FreeMarker",
     PHP_Laravel_blade: "PHP (Blade Template)",
-    Perl6: "Perl 6"
+    Perl6: "Perl 6",
+    AutoHotKey: "AutoHotkey / AutoIt"
 };
 var modesByName = {};
 for (var name in supportedModes) {
@@ -401,13 +413,14 @@ ace.define("ace/ext/themelist",["require","exports","module"], function(acequire
 
 });
 
-ace.define("ace/ext/options",["require","exports","module","ace/ext/menu_tools/overlay_page","ace/lib/dom","ace/lib/oop","ace/lib/event_emitter","ace/ext/modelist","ace/ext/themelist"], function(acequire, exports, module) {
+ace.define("ace/ext/options",["require","exports","module","ace/ext/menu_tools/overlay_page","ace/lib/dom","ace/lib/oop","ace/config","ace/lib/event_emitter","ace/ext/modelist","ace/ext/themelist"], function(acequire, exports, module) {
 "use strict";
-var overlayPage = acequire('./menu_tools/overlay_page').overlayPage;
 
- 
+acequire("./menu_tools/overlay_page");
+
 var dom = acequire("../lib/dom");
 var oop = acequire("../lib/oop");
+var config = acequire("../config");
 var EventEmitter = acequire("../lib/event_emitter").EventEmitter;
 var buildDom = dom.buildDom;
 
@@ -442,7 +455,9 @@ var optionGroups = {
             items: [
                 { caption : "Ace", value : null },
                 { caption : "Vim", value : "ace/keyboard/vim" },
-                { caption : "Emacs", value : "ace/keyboard/emacs" }
+                { caption : "Emacs", value : "ace/keyboard/emacs" },
+                { caption : "Sublime", value : "ace/keyboard/sublime" },
+                { caption : "VSCode", value : "ace/keyboard/vscode" }
             ]
         },
         "Font Size": {
@@ -611,7 +626,8 @@ var OptionPanel = function(editor, element) {
                 ["table", {id: "more-controls"}, 
                     this.renderOptionGroup(optionGroups.More)
                 ]
-            ]]
+            ]],
+            ["tr", null, ["td", {colspan: 2}, "version " + config.version]]
         ], this.container);
     };
     
@@ -749,19 +765,19 @@ exports.OptionPanel = OptionPanel;
 
 ace.define("ace/ext/settings_menu",["require","exports","module","ace/ext/options","ace/ext/menu_tools/overlay_page","ace/editor"], function(acequire, exports, module) {
 "use strict";
-var OptionPanel = acequire("ace/ext/options").OptionPanel;
+var OptionPanel = acequire("./options").OptionPanel;
 var overlayPage = acequire('./menu_tools/overlay_page').overlayPage;
 function showSettingsMenu(editor) {
     if (!document.getElementById('ace_settingsmenu')) {
         var options = new OptionPanel(editor);
         options.render();
         options.container.id = "ace_settingsmenu";
-        overlayPage(editor, options.container, '0', '0', '0');
+        overlayPage(editor, options.container);
         options.container.querySelector("select,input,button,checkbox").focus();
     }
 }
-module.exports.init = function(editor) {
-    var Editor = acequire("ace/editor").Editor;
+module.exports.init = function() {
+    var Editor = acequire("../editor").Editor;
     Editor.prototype.showSettingsMenu = function() {
         showSettingsMenu(this);
     };

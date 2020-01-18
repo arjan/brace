@@ -26,12 +26,12 @@ ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/l
     var BotsiHighlightRules = function() {
 
       var buildinConstants = (
-        "dialogflow|event|moment|web|image|location|audio|video|event|expecting|quick_replies|class|preview_image|trigger|random|title|subtitle|image_url|default_action|hide_modal|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url|open|intent|entity|match|label|as|to|name"
+        "dialogflow|event|moment|web|image|location|audio|video|event|expecting|quick_replies|quick_replies_mode|label|class|preview_image|trigger|random|title|subtitle|image_url|default_action|hide_modal|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url|open|intent|entity|match|label|as|to|name"
           + "|query|reply|chat_link|oauth_link|get_full_token|get_token_info|get_access_token|delete_token|spawn_group"
         );
 
         var builtinFunctions = (
-          "accumulate|if|else|after|once|when|branch|do|end|import|repeat|in|accumulate|dialog|task|test|elixir|def|defp|say|ask|await|emit|expect|log|invoke|perform|stop|reset|show|http_post|http_get|http_put|http_patch|http_delete|pause|type|remember|forget|tag|untag|gallery_template|list_template|buttons"
+          "accumulate|if|else|after|once|when|branch|do|end|import|repeat|in|accumulate|dialog|task|elixir|def|defp|say|ask|prompt|await|emit|log|invoke|perform|stop|reset|show|http_post|http_get|http_put|http_patch|http_delete|pause|type|remember|forget|tag|untag|gallery_template|list_template|buttons"
           + "|mail|cancel_emit"
         );
 
