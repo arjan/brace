@@ -1,5 +1,5 @@
 {
-  "name": "botsquad-brace-fork",
+  "name": "brace",
   "version": "0.10.0",
   "description": "browserify compatible version of the ace editor.",
   "main": "index.js",
