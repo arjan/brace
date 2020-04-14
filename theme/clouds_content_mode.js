@@ -2,7 +2,13 @@ ace.define("ace/theme/clouds_content_mode",["require","exports","module","ace/li
 
 exports.isDark = false;
 exports.cssClass = "ace-clouds-content-mode";
-exports.cssText = ".ace-clouds-content-mode .ace_marker-layer {\
+exports.cssText = ".ace-clouds-content-mode .ace_fold {\
+color: red;\
+background: none !important;\
+border: none !important;\
+content: \" ...\";\
+}\
+.ace-clouds-content-mode .ace_marker-layer {\
 z-index: 2;\
 mix-blend-mode: darken;\
 }\
