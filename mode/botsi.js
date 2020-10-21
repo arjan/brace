@@ -1,172 +1,199 @@
-ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
-    "use strict";
+ace.define("ace/mode/botsi_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function (acequire, exports, module) {
+  'use strict'
 
-    var oop = acequire("../lib/oop");
-    var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
-    var constantOtherSymbol = exports.constantOtherSymbol = {
-        token: "constant.language", // atoms, @attribute
-        regex: "(?:[@:][A-Za-z_]*)" // |[@$](?=[a-zA-Z0-9_]))[a-zA-Z0-9_]*[!=?]?
-    };
+  var oop = acequire('../lib/oop')
+  var TextHighlightRules = acequire('./text_highlight_rules').TextHighlightRules
+  var constantOtherSymbol = (exports.constantOtherSymbol = {
+    token: 'constant.language', // atoms, @attribute
+    regex: '(?:[@:][A-Za-z_]*)', // |[@$](?=[a-zA-Z0-9_]))[a-zA-Z0-9_]*[!=?]?
+  })
 
-    var qqString = exports.qqString = {
-        token: "string", // single line
-        regex: '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
-    };
+  var qqString = (exports.qqString = {
+    token: 'string', // single line
+    regex: '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]',
+  })
 
-    var constantNumericHex = exports.constantNumericHex = {
-        token: "constant.numeric", // hex
-        regex: "0[xX][0-9a-fA-F](?:[0-9a-fA-F]|_(?=[0-9a-fA-F]))*\\b"
-    };
+  var constantNumericHex = (exports.constantNumericHex = {
+    token: 'constant.numeric', // hex
+    regex: '0[xX][0-9a-fA-F](?:[0-9a-fA-F]|_(?=[0-9a-fA-F]))*\\b',
+  })
 
-    var constantNumericFloat = exports.constantNumericFloat = {
-        token: "constant.numeric", // float
-        regex: "[+-]?\\d(?:\\d|_(?=\\d))*(?:(?:\\.\\d(?:\\d|_(?=\\d))*)?(?:[eE][+-]?\\d+)?)?\\b"
-    };
+  var constantNumericFloat = (exports.constantNumericFloat = {
+    token: 'constant.numeric', // float
+    regex: '[+-]?\\d(?:\\d|_(?=\\d))*(?:(?:\\.\\d(?:\\d|_(?=\\d))*)?(?:[eE][+-]?\\d+)?)?\\b',
+  })
 
-    var BotsiHighlightRules = function() {
+  var BotsiHighlightRules = function () {
+    var buildinConstants =
+      'dialogflow|event|moment|web|image|location|audio|video|event|expecting|append_quick_replies|prepend_quick_replies|quick_replies|quick_replies_mode|label|class|preview_image|trigger|random|title|subtitle|image_url|default_action|hide_modal|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url|open|intent|entity|match|label|as|to|name' +
+      '|query|reply|chat_link|oauth_link|get_full_token|get_token_info|get_access_token|delete_token|spawn_group'
 
-      var buildinConstants = (
-        "dialogflow|event|moment|web|image|location|audio|video|event|expecting|append_quick_replies|prepend_quick_replies|quick_replies|quick_replies_mode|label|class|preview_image|trigger|random|title|subtitle|image_url|default_action|hide_modal|webview_height_ratio|messenger_extensions|fallback_url|webview_share_button|url|open|intent|entity|match|label|as|to|name"
-          + "|query|reply|chat_link|oauth_link|get_full_token|get_token_info|get_access_token|delete_token|spawn_group"
-        );
+    var builtinFunctions =
+      'accumulate|if|else|after|once|when|branch|do|end|import|repeat|in|accumulate|dialog|task|test|elixir|def|defp|say|ask|prompt|continue|await|emit|dial|expect|assert|log|goto|invoke|perform|stop|reset|show|http_post|http_get|http_put|http_patch|http_delete|pause|type|remember|forget|tag|untag|gallery_template|list_template|buttons' +
+      '|mail|cancel_emit'
 
-        var builtinFunctions = (
-          "accumulate|if|else|after|once|when|branch|do|end|import|repeat|in|accumulate|dialog|task|test|elixir|def|defp|say|ask|prompt|continue|await|emit|expect|assert|log|goto|invoke|perform|stop|reset|show|http_post|http_get|http_put|http_patch|http_delete|pause|type|remember|forget|tag|untag|gallery_template|list_template|buttons"
-          + "|mail|cancel_emit"
-        );
+    var keywords =
+      '__unknown__|__root__|__error__|__main__|__master__|__group__|__resume__|delay|timeout|typing_indicator|__unknown_location__|__unknown_attachment__|__unknown_event__|__timeout__|__ask_timeout__|__returning__'
 
-        var keywords = (
-            "__unknown__|__root__|__error__|__main__|__master__|__group__|__resume__|delay|timeout|typing_indicator|__unknown_location__|__unknown_attachment__|__unknown_event__|__timeout__|__ask_timeout__|__returning__"
-        );
+    var builtinVariables = ''
 
-        var builtinVariables = "";
+    var keywordMapper = (this.$keywords = this.createKeywordMapper(
+      {
+        'keyword': keywords,
+        'constant.language': buildinConstants,
+        'variable.language': builtinVariables,
+        'support.function': builtinFunctions,
+        'invalid.deprecated': 'debugger', // TODO is this a remnant from js mode?
+      },
+      'identifier',
+    ))
 
-        var keywordMapper = this.$keywords = this.createKeywordMapper({
-            "keyword": keywords,
-            "constant.language": buildinConstants,
-            "variable.language": builtinVariables,
-            "support.function": builtinFunctions,
-            "invalid.deprecated": "debugger" // TODO is this a remnant from js mode?
-        }, "identifier");
+    this.$rules = {
+      start: [
+        {
+          token: 'comment',
+          regex: '#.*$',
+        },
+        {
+          token: 'comment', // multi line comment
+          regex: '^=begin(?:$|\\s.*$)',
+          next: 'comment',
+        },
+        {
+          token: 'string.regexp',
+          regex: '[/](?:(?:\\[(?:\\\\]|[^\\]])+\\])|(?:\\\\/|[^\\]/]))*[/]\\w*\\s*(?=[).,;]|$)',
+        },
 
-        this.$rules = {
-            "start": [{
-                    token: "comment",
-                    regex: "#.*$"
-                }, {
-                    token: "comment", // multi line comment
-                    regex: "^=begin(?:$|\\s.*$)",
-                    next: "comment"
-                }, {
-                    token: "string.regexp",
-                    regex: "[/](?:(?:\\[(?:\\\\]|[^\\]])+\\])|(?:\\\\/|[^\\]/]))*[/]\\w*\\s*(?=[).,;]|$)"
-                },
-
-                [{
-                    regex: "[{}]",
-                    onMatch: function(val, state, stack) {
-                        this.next = val == "{" ? this.nextState : "";
-                        if (val == "{" && stack.length) {
-                            stack.unshift("start", state);
-                            return "paren.lparen";
-                        }
-                        if (val == "}" && stack.length) {
-                            stack.shift();
-                            this.next = stack.shift();
-                            if (this.next.indexOf("string") != -1)
-                                return "paren.end";
-                        }
-                        return val == "{" ? "paren.lparen" : "paren.rparen";
-                    },
-                    nextState: "start"
-                }, {
-                    token: "i18nstring.start",
-                    regex: /_\("/,
-                    push: [{
-                        token : "constant.language.escape",
-                        regex : /\\(?:[nsrtvfbae'"\\]|c.|C-.|M-.(?:\\C-.)?|[0-7]{3}|x[\da-fA-F]{2}|u[\da-fA-F]{4})/
-                    }, {
-                        token: "i18nstring.end",
-                        regex: /"\)/,
-                        next: "pop"
-                    }, {
-                        defaultToken: "i18nstring"
-                    }]
-                }, {
-                    token: "i18nstring.start",
-                    regex: /_"/,
-                    push: [{
-                        token : "constant.language.escape",
-                        regex : /\\(?:[nsrtvfbae'"\\]|c.|C-.|M-.(?:\\C-.)?|[0-7]{3}|x[\da-fA-F]{2}|u[\da-fA-F]{4})/
-                    }, {
-                        token: "i18nstring.end",
-                        regex: /"/,
-                        next: "pop"
-                    }, {
-                        defaultToken: "i18nstring"
-                    }]
-                }, {
-                    token: "string.start",
-                    regex: /"/,
-                    push: [{
-                        token: "constant.language.escape",
-                        regex: /\\(?:[nsrtvfbae'"\\]|c.|C-.|M-.(?:\\C-.)?|[0-7]{3}|x[\da-fA-F]{2}|u[\da-fA-F]{4})/
-                    }, {
-                        token: "paren.start",
-                        regex: /#{/,
-                        push: "start"
-                    }, {
-                        token: "string.end",
-                        regex: /"/,
-                        next: "pop"
-                    }, {
-                        defaultToken: "string"
-                    }]
-                }],
-
-                constantOtherSymbol,
-                constantNumericHex,
-                constantNumericFloat,
-
-                {
-                    token: "constant.language.boolean",
-                    regex: "(?:true|false|nil)\\b"
-                }, {
-                    token: keywordMapper,
-                    regex: "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
-                }, {
-                    token: "punctuation.separator.key-value",
-                    regex: "=>"
-                }, {
-                    token: "string.character",
-                    regex: "\\B\\?."
-                }, {
-                    token: "keyword.operator",
-                    regex: "!|\\$|%|&|\\*|\\-\\-|\\-|\\+\\+|\\+|~|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\\|\\||\\?\\:|\\*=|%=|\\+=|\\-=|&=|\\^="
-                }, {
-                    token: "paren.lparen",
-                    regex: "[[({]"
-                }, {
-                    token: "paren.rparen",
-                    regex: "[\\])}]"
-                }, {
-                    token: "text",
-                    regex: "\\s+"
-                }
+        [
+          {
+            regex: '[{}]',
+            onMatch: function (val, state, stack) {
+              this.next = val == '{' ? this.nextState : ''
+              if (val == '{' && stack.length) {
+                stack.unshift('start', state)
+                return 'paren.lparen'
+              }
+              if (val == '}' && stack.length) {
+                stack.shift()
+                this.next = stack.shift()
+                if (this.next.indexOf('string') != -1) return 'paren.end'
+              }
+              return val == '{' ? 'paren.lparen' : 'paren.rparen'
+            },
+            nextState: 'start',
+          },
+          {
+            token: 'i18nstring.start',
+            regex: /_\("/,
+            push: [
+              {
+                token: 'constant.language.escape',
+                regex: /\\(?:[nsrtvfbae'"\\]|c.|C-.|M-.(?:\\C-.)?|[0-7]{3}|x[\da-fA-F]{2}|u[\da-fA-F]{4})/,
+              },
+              {
+                token: 'i18nstring.end',
+                regex: /"\)/,
+                next: 'pop',
+              },
+              {
+                defaultToken: 'i18nstring',
+              },
             ],
-            "comment": {
-                token: "comment", // comment spanning whole line
-                regex: ".+"
-            }
-        };
+          },
+          {
+            token: 'i18nstring.start',
+            regex: /_"/,
+            push: [
+              {
+                token: 'constant.language.escape',
+                regex: /\\(?:[nsrtvfbae'"\\]|c.|C-.|M-.(?:\\C-.)?|[0-7]{3}|x[\da-fA-F]{2}|u[\da-fA-F]{4})/,
+              },
+              {
+                token: 'i18nstring.end',
+                regex: /"/,
+                next: 'pop',
+              },
+              {
+                defaultToken: 'i18nstring',
+              },
+            ],
+          },
+          {
+            token: 'string.start',
+            regex: /"/,
+            push: [
+              {
+                token: 'constant.language.escape',
+                regex: /\\(?:[nsrtvfbae'"\\]|c.|C-.|M-.(?:\\C-.)?|[0-7]{3}|x[\da-fA-F]{2}|u[\da-fA-F]{4})/,
+              },
+              {
+                token: 'paren.start',
+                regex: /#{/,
+                push: 'start',
+              },
+              {
+                token: 'string.end',
+                regex: /"/,
+                next: 'pop',
+              },
+              {
+                defaultToken: 'string',
+              },
+            ],
+          },
+        ],
 
-        this.normalizeRules();
-    };
+        constantOtherSymbol,
+        constantNumericHex,
+        constantNumericFloat,
 
-    oop.inherits(BotsiHighlightRules, TextHighlightRules);
+        {
+          token: 'constant.language.boolean',
+          regex: '(?:true|false|nil)\\b',
+        },
+        {
+          token: keywordMapper,
+          regex: '[a-zA-Z_$][a-zA-Z0-9_$]*\\b',
+        },
+        {
+          token: 'punctuation.separator.key-value',
+          regex: '=>',
+        },
+        {
+          token: 'string.character',
+          regex: '\\B\\?.',
+        },
+        {
+          token: 'keyword.operator',
+          regex:
+            '!|\\$|%|&|\\*|\\-\\-|\\-|\\+\\+|\\+|~|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\\|\\||\\?\\:|\\*=|%=|\\+=|\\-=|&=|\\^=',
+        },
+        {
+          token: 'paren.lparen',
+          regex: '[[({]',
+        },
+        {
+          token: 'paren.rparen',
+          regex: '[\\])}]',
+        },
+        {
+          token: 'text',
+          regex: '\\s+',
+        },
+      ],
+      comment: {
+        token: 'comment', // comment spanning whole line
+        regex: '.+',
+      },
+    }
 
-    exports.BotsiHighlightRules = BotsiHighlightRules;
-});
+    this.normalizeRules()
+  }
+
+  oop.inherits(BotsiHighlightRules, TextHighlightRules)
+
+  exports.BotsiHighlightRules = BotsiHighlightRules
+})
 
 ace.define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"], function(acequire, exports, module) {
 "use strict";
@@ -295,79 +322,77 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 });
 
-ace.define("ace/mode/botsi",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/botsi_highlight_rules","ace/mode/matching_brace_outdent","ace/range","ace/mode/behaviour/cstyle","ace/mode/folding/coffee"], function(acequire, exports, module) {
-"use strict";
+ace.define("ace/mode/botsi",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/botsi_highlight_rules","ace/mode/matching_brace_outdent","ace/range","ace/mode/behaviour/cstyle","ace/mode/folding/coffee"], function (acequire, exports, module) {
+  'use strict'
 
-var oop = acequire("../lib/oop");
-var TextMode = acequire("./text").Mode;
-var BotsiHighlightRules = acequire("./botsi_highlight_rules").BotsiHighlightRules;
-var MatchingBraceOutdent = acequire("./matching_brace_outdent").MatchingBraceOutdent;
-var Range = acequire("../range").Range;
-var CstyleBehaviour = acequire("./behaviour/cstyle").CstyleBehaviour;
-var FoldMode = acequire("./folding/coffee").FoldMode;
+  var oop = acequire('../lib/oop')
+  var TextMode = acequire('./text').Mode
+  var BotsiHighlightRules = acequire('./botsi_highlight_rules').BotsiHighlightRules
+  var MatchingBraceOutdent = acequire('./matching_brace_outdent').MatchingBraceOutdent
+  var Range = acequire('../range').Range
+  var CstyleBehaviour = acequire('./behaviour/cstyle').CstyleBehaviour
+  var FoldMode = acequire('./folding/coffee').FoldMode
 
-var Mode = function() {
-    this.HighlightRules = BotsiHighlightRules;
-    this.$outdent = new MatchingBraceOutdent();
-    this.$behaviour = new CstyleBehaviour();
-    this.foldingRules = new FoldMode();
-};
-oop.inherits(Mode, TextMode);
+  var Mode = function () {
+    this.HighlightRules = BotsiHighlightRules
+    this.$outdent = new MatchingBraceOutdent()
+    this.$behaviour = new CstyleBehaviour()
+    this.foldingRules = new FoldMode()
+  }
+  oop.inherits(Mode, TextMode)
+  ;(function () {
+    this.lineCommentStart = '#'
 
-(function() {
+    this.getNextLineIndent = function (state, line, tab) {
+      var indent = this.$getIndent(line)
 
+      var tokenizedLine = this.getTokenizer().getLineTokens(line, state)
+      var tokens = tokenizedLine.tokens
 
-    this.lineCommentStart = "#";
+      if (tokens.length && tokens[tokens.length - 1].type == 'comment') {
+        return indent
+      }
 
-    this.getNextLineIndent = function(state, line, tab) {
-        var indent = this.$getIndent(line);
-
-        var tokenizedLine = this.getTokenizer().getLineTokens(line, state);
-        var tokens = tokenizedLine.tokens;
-
-        if (tokens.length && tokens[tokens.length-1].type == "comment") {
-            return indent;
+      if (state == 'start') {
+        var match = line.match(/^.*[\{\(\[]\s*$/)
+        var startingClassOrMethod = line.match(/^\s*(class|def|module)\s.*$/)
+        var startingDoBlock = line.match(/.*do(\s*|\s+\|.*\|\s*)$/)
+        var startingConditional = line.match(/^\s*(if|else|when)\s*/)
+        if (match || startingClassOrMethod || startingDoBlock || startingConditional) {
+          indent += tab
         }
+      }
 
-        if (state == "start") {
-            var match = line.match(/^.*[\{\(\[]\s*$/);
-            var startingClassOrMethod = line.match(/^\s*(class|def|module)\s.*$/);
-            var startingDoBlock = line.match(/.*do(\s*|\s+\|.*\|\s*)$/);
-            var startingConditional = line.match(/^\s*(if|else|when)\s*/);
-            if (match || startingClassOrMethod || startingDoBlock || startingConditional) {
-                indent += tab;
-            }
-        }
+      return indent
+    }
 
-        return indent;
-    };
+    this.checkOutdent = function (state, line, input) {
+      return /^\s+(end|else)$/.test(line + input) || this.$outdent.checkOutdent(line, input)
+    }
 
-    this.checkOutdent = function(state, line, input) {
-        return /^\s+(end|else)$/.test(line + input) || this.$outdent.checkOutdent(line, input);
-    };
+    this.autoOutdent = function (state, session, row) {
+      var line = session.getLine(row)
+      if (/}/.test(line)) return this.$outdent.autoOutdent(session, row)
+      var indent = this.$getIndent(line)
+      var prevLine = session.getLine(row - 1)
+      var prevIndent = this.$getIndent(prevLine)
+      var tab = session.getTabString()
+      if (prevIndent.length <= indent.length) {
+        if (indent.slice(-tab.length) == tab)
+          session.remove(new Range(row, indent.length - tab.length, row, indent.length))
+      }
+    }
 
-    this.autoOutdent = function(state, session, row) {
-        var line = session.getLine(row);
-        if (/}/.test(line))
-            return this.$outdent.autoOutdent(session, row);
-        var indent = this.$getIndent(line);
-        var prevLine = session.getLine(row - 1);
-        var prevIndent = this.$getIndent(prevLine);
-        var tab = session.getTabString();
-        if (prevIndent.length <= indent.length) {
-            if (indent.slice(-tab.length) == tab)
-                session.remove(new Range(row, indent.length-tab.length, row, indent.length));
-        }
-    };
+    this.$id = 'ace/mode/botsi'
+  }.call(Mode.prototype))
 
-    this.$id = "ace/mode/botsi";
-}).call(Mode.prototype);
-
-exports.Mode = Mode;
-});                (function() {
+  exports.Mode = Mode
+})
+;                (function() {
                     ace.acequire(["ace/mode/botsi"], function(m) {
                         if (typeof module == "object" && typeof exports == "object" && module) {
                             module.exports = m;
                         }
                     });
                 })();
+            

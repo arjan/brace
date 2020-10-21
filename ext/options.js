@@ -160,23 +160,24 @@ var supportedModes = {
     ABC:         ["abc"],
     ActionScript:["as"],
     ADA:         ["ada|adb"],
+    Alda:        ["alda"],
     Apache_Conf: ["^htaccess|^htgroups|^htpasswd|^conf|htaccess|htgroups|htpasswd"],
+    Apex:        ["apex|cls|trigger|tgr"],
+    AQL:         ["aql"],
     AsciiDoc:    ["asciidoc|adoc"],
     ASL:         ["dsl|asl"],
     Assembly_x86:["asm|a"],
     AutoHotKey:  ["ahk"],
-    Apex:        ["apex|cls|trigger|tgr"],
-    AQL:         ["aql"],
     BatchFile:   ["bat|cmd"],
     Botsi:       ["bot"],
     C_Cpp:       ["cpp|c|cc|cxx|h|hh|hpp|ino"],
     C9Search:    ["c9search_results"],
-    Crystal:     ["cr"],
     Cirru:       ["cirru|cr"],
     Clojure:     ["clj|cljs"],
     Cobol:       ["CBL|COB"],
     coffee:      ["coffee|cf|cson|^Cakefile"],
     ColdFusion:  ["cfm"],
+    Crystal:     ["cr"],
     CSharp:      ["cs"],
     Csound_Document: ["csd"],
     Csound_Orchestra: ["orc"],
@@ -223,8 +224,8 @@ var supportedModes = {
     Jade:        ["jade|pug"],
     Java:        ["java"],
     JavaScript:  ["js|jsm|jsx"],
-    JSON5:       ["json5"],
     JSON:        ["json"],
+    JSON5:       ["json5"],
     JSONiq:      ["jq"],
     JSP:         ["jsp"],
     JSSM:        ["jssm|jssm_state"],
@@ -246,13 +247,15 @@ var supportedModes = {
     Mask:        ["mask"],
     MATLAB:      ["matlab"],
     Maze:        ["mz"],
+    MediaWiki:   ["wiki|mediawiki"],
     MEL:         ["mel"],
+    MIPS:        ["s|asm"],
     MIXAL:       ["mixal"],
     MUSHCode:    ["mc|mush"],
     MySQL:       ["mysql"],
     Nginx:       ["nginx|conf"],
-    Nix:         ["nix"],
     Nim:         ["nim"],
+    Nix:         ["nix"],
     NSIS:        ["nsi|nsh"],
     Nunjucks:    ["nunjucks|nunjs|nj|njk"],
     ObjectiveC:  ["m|mm"],
@@ -261,16 +264,18 @@ var supportedModes = {
     Perl:        ["pl|pm"],
     Perl6:       ["p6|pl6|pm6"],
     pgSQL:       ["pgsql"],
-    PHP_Laravel_blade: ["blade.php"],
     PHP:         ["php|inc|phtml|shtml|php3|php4|php5|phps|phpt|aw|ctp|module"],
-    Puppet:      ["epp|pp"],
+    PHP_Laravel_blade: ["blade.php"],
     Pig:         ["pig"],
     Powershell:  ["ps1"],
     Praat:       ["praat|praatscript|psc|proc"],
+    Prisma:      ["prisma"],
     Prolog:      ["plg|prolog"],
     Properties:  ["properties"],
     Protobuf:    ["proto"],
+    Puppet:      ["epp|pp"],
     Python:      ["py"],
+    QML:         ["qml"],
     R:           ["r"],
     Razor:       ["cshtml|asp"],
     RDoc:        ["Rd"],
@@ -288,6 +293,7 @@ var supportedModes = {
     SJS:         ["sjs"],
     Slim:        ["slim|skim"],
     Smarty:      ["smarty|tpl"],
+    Smithy:      ["smithy"],
     snippets:    ["snippets"],
     Soy_Template:["soy"],
     Space:       ["space"],
@@ -368,7 +374,7 @@ ace.define("ace/ext/themelist",["require","exports","module"], function(acequire
     ["Solarized Light"],
     ["TextMate"       ],
     ["Tomorrow"       ],
-    ["XCode"          ],
+    ["Xcode"          ],
     ["Kuroir"],
     ["KatzenMilch"],
     ["SQL Server"           ,"sqlserver"               , "light"],
@@ -386,6 +392,7 @@ ace.define("ace/ext/themelist",["require","exports","module"], function(acequire
     ["Merbivore Soft"       ,"merbivore_soft"          ,  "dark"],
     ["Mono Industrial"      ,"mono_industrial"         ,  "dark"],
     ["Monokai"              ,"monokai"                 ,  "dark"],
+    ["Nord Dark"            ,"nord_dark"               ,  "dark"],
     ["Pastel on dark"       ,"pastel_on_dark"          ,  "dark"],
     ["Solarized Dark"       ,"solarized_dark"          ,  "dark"],
     ["Terminal"             ,"terminal"                ,  "dark"],
@@ -500,6 +507,7 @@ var optionGroups = {
         "Soft Tabs": [{
             path: "useSoftTabs"
         }, {
+            ariaLabel: "Tab Size",
             path: "tabSize",
             type: "number",
             values: [2, 3, 4, 8, 16]
@@ -521,6 +529,12 @@ var optionGroups = {
         "Enable Behaviours": {
             path: "behavioursEnabled"
         },
+        "Wrap with quotes": {
+            path: "wrapBehavioursEnabled"
+        },
+        "Enable Auto Indent": {
+            path: "enableAutoIndent"
+        },
         "Full Line Selection": {
             type: "checkbox",
             values: "text|line",
@@ -535,11 +549,12 @@ var optionGroups = {
         "Show Indent Guides": {
             path: "displayIndentGuides"
         },
-        "Persistent Scrollbar": [{
+        "Persistent HScrollbar": {
             path: "hScrollBarAlwaysVisible"
-        }, {
+        },
+        "Persistent VScrollbar": {
             path: "vScrollBarAlwaysVisible"
-        }],
+        },
         "Animate scrolling": {
             path: "animatedScroll"
         },
@@ -558,6 +573,7 @@ var optionGroups = {
         "Show Print Margin": [{
             path: "showPrintMargin"
         }, {
+            ariaLabel: "Print Margin",
             type: "number",
             path: "printMarginColumn"
         }],
@@ -620,10 +636,10 @@ var OptionPanel = function(editor, element) {
     
     this.render = function() {
         this.container.innerHTML = "";
-        buildDom(["table", {id: "controls"}, 
+        buildDom(["table", {role: "presentation", id: "controls"}, 
             this.renderOptionGroup(optionGroups.Main),
             ["tr", null, ["td", {colspan: 2},
-                ["table", {id: "more-controls"}, 
+                ["table", {role: "presentation", id: "more-controls"}, 
                     this.renderOptionGroup(optionGroups.More)
                 ]
             ]],
@@ -666,17 +682,20 @@ var OptionPanel = function(editor, element) {
         }
         
         if (option.type == "buttonBar") {
-            control = ["div", option.items.map(function(item) {
+            control = ["div", {role: "group", "aria-labelledby": option.path + "-label"}, option.items.map(function(item) {
                 return ["button", { 
                     value: item.value, 
                     ace_selected_button: value == item.value, 
+                    'aria-pressed': value == item.value, 
                     onclick: function() {
                         self.setOption(option, item.value);
                         var nodes = this.parentNode.querySelectorAll("[ace_selected_button]");
                         for (var i = 0; i < nodes.length; i++) {
                             nodes[i].removeAttribute("ace_selected_button");
+                            nodes[i].setAttribute("aria-pressed", false);
                         }
                         this.setAttribute("ace_selected_button", true);
+                        this.setAttribute("aria-pressed", true);
                     } 
                 }, item.desc || item.caption || item.name];
             })];
@@ -684,6 +703,11 @@ var OptionPanel = function(editor, element) {
             control = ["input", {type: "number", value: value || option.defaultValue, style:"width:3em", oninput: function() {
                 self.setOption(option, parseInt(this.value));
             }}];
+            if (option.ariaLabel) {
+                control[1]["aria-label"] = option.ariaLabel;
+            } else {
+                control[1].id = key;
+            }
             if (option.defaults) {
                 control = [control, option.defaults.map(function(item) {
                     return ["button", {onclick: function() {
@@ -727,11 +751,13 @@ var OptionPanel = function(editor, element) {
     this.renderOption = function(key, option) {
         if (option.path && !option.onchange && !this.editor.$options[option.path])
             return;
-        this.options[option.path] = option;
-        var safeKey = "-" + option.path;
+        var path = Array.isArray(option) ? option[0].path : option.path;
+        this.options[path] = option;
+        var safeKey = "-" + path;
+        var safeId = path + "-label";
         var control = this.renderOptionControl(safeKey, option);
         return ["tr", {class: "ace_optionsMenuEntry"}, ["td",
-            ["label", {for: safeKey}, key]
+            ["label", {for: safeKey, id: safeId}, key]
         ], ["td", control]];
     };
     
